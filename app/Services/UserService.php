@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\{
-    Exceptions\JsonException, Exceptions\UserCreateException, User, Company
+    Exceptions\UserCreateException, User, Company
 };
 use Illuminate\Database\Connection;
 
