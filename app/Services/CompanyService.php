@@ -13,10 +13,14 @@ use App\Company;
 
 class CompanyService
 {
+
     /**
      * @var Company
      */
     private $companyModel;
+
+
+    private $perPage = 10;
 
     public function __construct(Company $companyModel)
     {
