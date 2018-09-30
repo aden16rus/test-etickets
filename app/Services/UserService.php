@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
-use App\{User, Company};
+use App\{
+    Exceptions\JsonException, User, Company
+};
+use Illuminate\Database\Connection;
 
 class UserService
 {
@@ -21,33 +24,48 @@ class UserService
     private $perPage = 10;
 
     /**
+     * @var Connection
+     */
+    private $dbManager;
+
+    /**
      * UserService constructor
      * @param User $userModel
      * @param Company $company
+     * @param Connection $dbManager
      */
-    public function __construct(User $userModel, Company $company)
+    public function __construct(User $userModel, Company $company, Connection $dbManager)
     {
         $this->userModel = $userModel;
         $this->company = $company;
+        $this->dbManager = $dbManager;
     }
 
     /**
      * Creates new user
      * @param array $attributes
      * @return mixed
+     * @throws JsonException
      */
     public function create(array $attributes)
     {
-        $attributes['password'] = bcrypt($attributes['password']);
-        $user = $this->userModel->create($attributes);
-        $user->saveOrFail();
+        try {
+            $this->dbManager->beginTransaction();
 
-        if (isset($attributes['company'])) {
-            $company = $this->company->find($attributes['company']);
-            $user->companies()->save($company);
+            $attributes['password'] = bcrypt($attributes['password']);
+            $user = $this->userModel->create($attributes);
+            $user->saveOrFail();
+
+            if (isset($attributes['company'])) {
+                $company = $this->company->find($attributes['company']);
+                $user->companies()->save($company);
+            }
+
+            return $user;
+        } catch(\Exception $e) {
+            $this->dbManager->rollBack();
+            throw new JsonException('error on db query');
         }
-
-        return $user;
     }
 
     /**
