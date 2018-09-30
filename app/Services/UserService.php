@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\{
-    Exceptions\JsonException, User, Company
+    Exceptions\JsonException, Exceptions\UserCreateException, User, Company
 };
 use Illuminate\Database\Connection;
 
@@ -45,7 +45,7 @@ class UserService
      * Creates new user
      * @param array $attributes
      * @return mixed
-     * @throws JsonException
+     * @throws \Exception
      */
     public function create(array $attributes)
     {
@@ -61,10 +61,12 @@ class UserService
                 $user->companies()->save($company);
             }
 
+            $this->dbManager->commit();
+
             return $user;
         } catch(\Exception $e) {
             $this->dbManager->rollBack();
-            throw new JsonException('error on db query');
+            throw new UserCreateException('db query can not execute');
         }
     }
 
