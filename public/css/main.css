@@ -1,0 +1,20 @@
+.request-wrap {
+    width: 100%;
+    float: left;
+    margin: 0 20px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+}
+.request-wrap .left {
+    width: 20%;
+    float: left;
+    clear: both;
+}
+.request-wrap .right {
+    width: 80%;
+    float: left;
+}
+.request-sender {
+    margin-bottom: 100px;
+}
