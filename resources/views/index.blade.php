@@ -190,7 +190,7 @@
                         Response
                     </div>
                     <div class="right">
-                        integer, 1= success, 0=fail or nothing to delete
+                        JSON
                     </div>
                 </div>
             </div>
@@ -363,7 +363,7 @@
                         Response
                     </div>
                     <div class="right">
-                        integer, 1= success, 0=fail or nothing to delete
+                        JSON
                     </div>
                 </div>
             </div>
